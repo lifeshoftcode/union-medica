@@ -20,11 +20,9 @@ El proyecto sigue la convención de **App Router** de Next.js, organizando las r
   - **`/investigacion`**: Publicaciones científicas y revista médica.
   - **`/contacto`**: Información de contacto y ubicación.
   - **`/api`**: Endpoints de servidor (ej. integración con Gemini para el Chatbot).
-- **`/components`**: Componentes de UI reutilizables.
-  - **`Navbar.tsx`**: Menú de navegación con Mega Menú inteligente.
-  - **`Footer.tsx`**: Pie de página institucional y redes sociales.
-  - **`ChatWidget.tsx`**: Asistente virtual integrado con IA.
-  - **`HeroVideo.tsx`**: Sección principal con video de alto impacto.
+- **`/components`**: Componentes de UI reutilizables y modulares.
+  - **`Navbar.tsx`**, **`Footer.tsx`**, **`ChatWidget.tsx`**: Componentes globales de la plataforma.
+  - **`/home`**: Componentes exclusivos de la página de inicio (`HeroVideo`, `ServicesSection`, etc.).
 - **`/public`**: Recursos estáticos (Logos, videos, imágenes optimizadas).
 
 ---
