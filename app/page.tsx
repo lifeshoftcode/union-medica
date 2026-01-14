@@ -1,7 +1,7 @@
-import HeroVideo from "@/components/home/HeroVideo";
-import ServicesSection from "@/components/home/ServicesSection";
-import ParallaxNewsSection from "@/components/home/ParallaxNewsSection";
-import ServicesAlternateSection from "@/components/home/ServicesAlternateSection";
+import HeroVideo from "@/modules/home/HeroVideo";
+import ServicesSection from "@/modules/home/ServicesSection";
+import ParallaxNewsSection from "@/modules/home/ParallaxNewsSection";
+import ServicesAlternateSection from "@/modules/home/ServicesAlternateSection";
 
 export default function Home() {
   return (
