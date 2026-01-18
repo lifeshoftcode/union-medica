@@ -6,7 +6,7 @@ const ServicesAlternateSection = () => {
             desc: "Más tecnología, más precisión para tu salud. Equipamiento de última generación al servicio de tu bienestar.",
             btn: "Turismo de Salud",
             link: "/about",
-            image: "/doctor-hero.jpg",
+            image: "/images/home/doctor-hero.jpg",
             reverse: true
         },
         {
@@ -14,7 +14,7 @@ const ServicesAlternateSection = () => {
             desc: "Donde la especialización es fortaleza colectiva. Un equipo multidisciplinario trabajando por un mismo objetivo: tu salud.",
             btn: "Residencias Médicas",
             link: "/international",
-            image: "/residencias-medicas.jpg",
+            image: "/images/home/residencias-medicas.jpg",
             reverse: false
         }
     ];

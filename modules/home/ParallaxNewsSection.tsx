@@ -3,7 +3,7 @@ const ParallaxNewsSection = () => {
         <section className="relative h-[600px] w-full overflow-hidden group">
             <div
                 className="absolute inset-0 parallax-bg"
-                style={{ backgroundImage: 'url("/news-parallax.jpg")' }}
+                style={{ backgroundImage: 'url("/images/home/news-parallax.jpg")' }}
             />
             <div className="absolute inset-0 bg-black/60 transition-colors group-hover:bg-black/50" />
             <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">

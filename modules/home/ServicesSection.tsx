@@ -3,22 +3,22 @@ const ServicesSection = () => {
         {
             title: "Nuestros Doctores",
             desc: "Busca por nombre, especialidad, ubicación y más.",
-            link: "/doctors",
-            image: "/doctor-card.jpg", // From generated images
+            link: "/medicos",
+            image: "/images/home/doctor-card.jpg", // From generated images
             btnText: "Encontrar un doctor"
         },
         {
             title: "Segunda Opinión Médica",
             desc: "Obtén una nueva valoración de nuestros especialistas",
             link: "/segunda-opinion",
-            image: "/segunda-opinion.jpg",
+            image: "/images/home/segunda-opinion.jpg",
             btnText: "Solicítala ahora"
         },
         {
             title: "Citas",
             desc: "Obtén la atención presencial o virtual que necesitas.",
             link: "/appointments",
-            image: "/appointments-card.jpg",
+            image: "/images/home/appointments-card.jpg",
             btnText: "Agendar ahora"
         }
     ];

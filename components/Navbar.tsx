@@ -7,7 +7,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 h-full relative">
         <Link href="/" className="flex-shrink-0 transition-all hover:scale-[1.02] active:scale-95">
           <Image
-            src="/logo-union-medica.webp"
+            src="/brand/logo-union-medica.webp"
             alt="Clínica Unión Médica"
             width={180}
             height={48}
@@ -108,15 +108,22 @@ const Navbar = () => {
                           {menu.name === 'Nosotros' ? 'Institucional' : 'Pacientes'}
                         </h4>
                         <div className="flex flex-col space-y-1">
-                          {menu.items.map((subItem) => (
-                            <Link
-                              key={subItem}
-                              href={`/${menu.name.toLowerCase()}/${subItem.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-')}`}
-                              className="block px-3 py-1.5 text-[14px] text-gray-700 font-semibold hover:bg-gray-50 hover:text-um-green transition-colors rounded-lg"
-                            >
-                              {subItem}
-                            </Link>
-                          ))}
+                          {menu.items.map((subItem) => {
+                            const isEquipoMedico = subItem === 'Equipo Médico';
+                            const href = isEquipoMedico
+                              ? '/medicos'
+                              : `/${menu.name.toLowerCase()}/${subItem.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-')}`;
+
+                            return (
+                              <Link
+                                key={subItem}
+                                href={href}
+                                className="block px-3 py-1.5 text-[14px] text-gray-700 font-semibold hover:bg-gray-50 hover:text-um-green transition-colors rounded-lg"
+                              >
+                                {subItem}
+                              </Link>
+                            );
+                          })}
                         </div>
                       </div>
                     )}
