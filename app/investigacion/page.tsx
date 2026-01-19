@@ -1,13 +1,20 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { getCommitteeMembers, getFeaturedResearch } from "./actions";
 
 export const metadata: Metadata = {
     title: "Investigación | Clínica Unión Médica",
     description: "Promovemos la investigación científica para garantizar la calidad de los servicios de salud y el desarrollo del conocimiento médico en Santiago.",
 };
 
-export default function InvestigacionPage() {
+export default async function InvestigacionPage() {
+    // Fetch data from database
+    const [comite, featuredResearch] = await Promise.all([
+        getCommitteeMembers(),
+        getFeaturedResearch(),
+    ]);
+
     const objetivos = [
         "Promover y facilitar la investigación científica en Clínica Unión Médica.",
         "Proponer las políticas de investigación.",
@@ -22,14 +29,6 @@ export default function InvestigacionPage() {
         "Orientar sobre la elección de temas de actualidad para investigación científica.",
         "Conformación del Comité de Bioética.",
         "Proponer indicadores de calidad; cada propuesta debe referenciar el método Vancouver.",
-    ];
-
-    const comite = [
-        { name: "Dra. María Robledo", role: "Coordinadora", image: "/images/investigacion/comite/maria-robledo.webp" },
-        { name: "Padre Diego López", role: "Miembro", image: "/images/investigacion/comite/diego-lopez.webp" },
-        { name: "Dra. Natalia Garcia", role: "Directora Unidad de Investigación", image: "/images/investigacion/comite/natalia-garcia.webp" },
-        { name: "Dra. Maria Jose Fernández", role: "Miembro", image: "/images/investigacion/comite/maria-jose-fernandez.webp" },
-        { name: "Dra. Gloria Azcona", role: "Miembro", image: "/images/investigacion/comite/gloria-azcona.webp" },
     ];
 
     return (
@@ -142,7 +141,7 @@ export default function InvestigacionPage() {
                             <div key={idx} className="flex flex-col items-center group">
                                 <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white shadow-xl mb-4 transition-transform group-hover:scale-105">
                                     <Image
-                                        src={persona.image}
+                                        src={persona.image || '/images/placeholder-avatar.jpg'}
                                         alt={persona.name}
                                         fill
                                         className="object-cover"
@@ -174,35 +173,71 @@ export default function InvestigacionPage() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <article className="group relative overflow-hidden rounded-[2.5rem] bg-white shadow-xl hover:shadow-2xl transition-all border border-gray-100 flex flex-col md:flex-row items-stretch">
-                            <div className="relative w-full md:w-48 lg:w-64 h-64 md:h-auto overflow-hidden bg-gray-100">
-                                <Image
-                                    src="/images/investigacion/lista.webp"
-                                    alt="Investigación destacada"
-                                    fill
-                                    className="object-cover transition-transform duration-700 group-hover:scale-110"
-                                />
-                            </div>
-                            <div className="p-8 flex-1 space-y-4">
-                                <span className="inline-block px-3 py-1 rounded-full bg-um-green/10 text-um-green text-[10px] font-black uppercase tracking-widest">
-                                    Investigación Destacada
-                                </span>
-                                <h3 className="text-xl font-black text-gray-900 leading-tight group-hover:text-um-green transition-colors">
-                                    Terapia de REGEN COV como base de terapia inmunomoduladora mixta en pacientes hospitalizados por neumonía por SARS-CoV-2
-                                </h3>
-                                <p className="text-gray-500 font-medium text-sm line-clamp-3">
-                                    Serie de casos analizando el impacto de terapias mixtas en la recuperación de pacientes con complicaciones pulmonares graves.
-                                </p>
-                                <Link
-                                    href="/news/terapia-de-regen-cov-..."
-                                    className="inline-flex items-center text-um-green font-black text-sm gap-2"
-                                >
-                                    Seguir leyendo
-                                </Link>
-                            </div>
-                        </article>
-
-                        {/* Si hubiera más, se añadirían aquí. Por ahora dejamos este diseño equilibrado */}
+                        {featuredResearch.length > 0 ? (
+                            featuredResearch.map((research) => (
+                                <article key={research.id} className="group relative overflow-hidden rounded-[2.5rem] bg-white shadow-xl hover:shadow-2xl transition-all border border-gray-100 flex flex-col md:flex-row items-stretch">
+                                    {research.image && (
+                                        <div className="relative w-full md:w-48 lg:w-64 h-64 md:h-auto overflow-hidden bg-gray-100">
+                                            <Image
+                                                src={research.image}
+                                                alt={research.title}
+                                                fill
+                                                className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                            />
+                                        </div>
+                                    )}
+                                    <div className="p-8 flex-1 space-y-4">
+                                        <span className="inline-block px-3 py-1 rounded-full bg-um-green/10 text-um-green text-[10px] font-black uppercase tracking-widest">
+                                            {research.category}
+                                        </span>
+                                        <h3 className="text-xl font-black text-gray-900 leading-tight group-hover:text-um-green transition-colors">
+                                            {research.title}
+                                        </h3>
+                                        {research.description && (
+                                            <p className="text-gray-500 font-medium text-sm line-clamp-3">
+                                                {research.description}
+                                            </p>
+                                        )}
+                                        {research.link && (
+                                            <Link
+                                                href={research.link}
+                                                className="inline-flex items-center text-um-green font-black text-sm gap-2"
+                                            >
+                                                Seguir leyendo
+                                            </Link>
+                                        )}
+                                    </div>
+                                </article>
+                            ))
+                        ) : (
+                            <article className="group relative overflow-hidden rounded-[2.5rem] bg-white shadow-xl hover:shadow-2xl transition-all border border-gray-100 flex flex-col md:flex-row items-stretch">
+                                <div className="relative w-full md:w-48 lg:w-64 h-64 md:h-auto overflow-hidden bg-gray-100">
+                                    <Image
+                                        src="/images/investigacion/lista.webp"
+                                        alt="Investigación destacada"
+                                        fill
+                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                    />
+                                </div>
+                                <div className="p-8 flex-1 space-y-4">
+                                    <span className="inline-block px-3 py-1 rounded-full bg-um-green/10 text-um-green text-[10px] font-black uppercase tracking-widest">
+                                        Investigación Destacada
+                                    </span>
+                                    <h3 className="text-xl font-black text-gray-900 leading-tight group-hover:text-um-green transition-colors">
+                                        Terapia de REGEN COV como base de terapia inmunomoduladora mixta en pacientes hospitalizados por neumonía por SARS-CoV-2
+                                    </h3>
+                                    <p className="text-gray-500 font-medium text-sm line-clamp-3">
+                                        Serie de casos analizando el impacto de terapias mixtas en la recuperación de pacientes con complicaciones pulmonares graves.
+                                    </p>
+                                    <Link
+                                        href="/news/terapia-de-regen-cov-..."
+                                        className="inline-flex items-center text-um-green font-black text-sm gap-2"
+                                    >
+                                        Seguir leyendo
+                                    </Link>
+                                </div>
+                            </article>
+                        )}
                     </div>
                 </section>
 

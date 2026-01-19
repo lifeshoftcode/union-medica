@@ -51,7 +51,7 @@ El proyecto sigue la convención de **App Router** de Next.js, organizando las r
 - **Framework**: Next.js 15 (App Router)
 - **Lenguaje**: TypeScript
 - **Estilos**: Tailwind CSS 4
-- **IA**: Google Generative AI (Gemini Flash 1.5)
+- **IA**: Google Generative AI (Gemini 3 Flash Preview)
 - **Iconografía**: SVG Custom Paths & FontAwesome
 - **Fuentes**: Google Fonts (Inter)
 

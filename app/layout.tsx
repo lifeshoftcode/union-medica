@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import ChatWidget from "@/components/ChatWidget";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,6 +17,8 @@ export const metadata: Metadata = {
   description: "Líderes en salud en la región del Cibao, República Dominicana.",
 };
 
+import ConditionalLayout from "@/components/ConditionalLayout";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,12 +27,9 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased selection:bg-um-green selection:text-white`}>
-        <Navbar />
-        <main className="min-h-screen">
+        <ConditionalLayout>
           {children}
-        </main>
-        <Footer />
-        <ChatWidget />
+        </ConditionalLayout>
       </body>
     </html>
   );

@@ -1,20 +1,9 @@
-"use client";
-
-import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import ConocenosClient from "./ConocenosClient";
+import { getContentBlocks } from "@/app/actions/content";
 
-export default function ConocenosPage() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const totalSlides = 3;
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % totalSlides);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
-  };
+export default async function ConocenosPage() {
+  const carouselItems = await getContentBlocks("conocenos", "carousel");
 
   return (
     <main className="pt-[154px] pb-16">
@@ -29,89 +18,8 @@ export default function ConocenosPage() {
           </h2>
         </header>
 
-        <div className="w-full">
-          <div className="relative overflow-hidden rounded-2xl shadow-md" aria-roledescription="carousel">
-            <div
-              className="flex transition-transform duration-500 ease-in-out"
-              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-            >
-              <figure className="relative min-w-full">
-                <Image
-                  alt="Paciente y familiar sonriendo en exteriores"
-                  width={1600}
-                  height={900}
-                  className="h-[340px] w-full object-cover sm:h-[440px] lg:h-[520px]"
-                  src="/images/conocenos/1.webp"
-                  priority
-                />
-                <figcaption className="absolute inset-x-0 bottom-0 bg-black/40 p-4 text-sm text-white sm:text-base">
-                  Un programa de cuidado virtual permitió a una madre recuperarse en casa después de un trasplante.
-                </figcaption>
-              </figure>
+        <ConocenosClient carouselItems={carouselItems} />
 
-              <figure className="relative min-w-full">
-                <Image
-                  alt="Equipo médico colaborando"
-                  width={1600}
-                  height={900}
-                  className="h-[340px] w-full object-cover sm:h-[440px] lg:h-[520px]"
-                  src="/images/conocenos/2.webp"
-                />
-                <figcaption className="absolute inset-x-0 bottom-0 bg-black/40 p-4 text-sm text-white sm:text-base">
-                  Nuestros equipos multidisciplinarios trabajan juntos para cada caso.
-                </figcaption>
-              </figure>
-
-              <figure className="relative min-w-full">
-                <Image
-                  alt="Instalaciones modernas del centro"
-                  width={1600}
-                  height={900}
-                  className="h-[340px] w-full object-cover sm:h-[440px] lg:h-[520px]"
-                  src="/images/conocenos/3.webp"
-                />
-                <figcaption className="absolute inset-x-0 bottom-0 bg-black/40 p-4 text-sm text-white sm:text-base">
-                  Instalaciones de clase mundial enfocadas en la experiencia del paciente.
-                </figcaption>
-              </figure>
-            </div>
-
-            <button
-              onClick={prevSlide}
-              type="button"
-              aria-label="Anterior"
-              className="group absolute left-3 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow backdrop-blur-sm hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-um-terciario"
-            >
-              <svg className="h-6 w-6 text-gray-800 group-hover:text-um-terciario" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M15 18l-6-6 6-6"></path>
-              </svg>
-            </button>
-            <button
-              onClick={nextSlide}
-              type="button"
-              aria-label="Siguiente"
-              className="group absolute right-3 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/90 p-2 shadow backdrop-blur-sm hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-um-terciario"
-            >
-              <svg className="h-6 w-6 text-gray-800 group-hover:text-um-terciario" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M9 18l6-6-6-6"></path>
-              </svg>
-            </button>
-          </div>
-
-          <div className="mt-4 flex justify-center gap-2">
-            {[0, 1, 2].map((idx) => (
-              <button
-                key={idx}
-                onClick={() => setCurrentSlide(idx)}
-                type="button"
-                aria-label={`Ir al slide ${idx + 1}`}
-                aria-current={currentSlide === idx}
-                className={`h-2.5 w-2.5 rounded-full transition ${currentSlide === idx ? "scale-110 bg-um-terciario" : "bg-gray-300"
-                  }`}
-              ></button>
-            ))}
-          </div>
-        </div>
 
         <section className="mt-16 sm:mt-20 rounded-3xl bg-white shadow-sm ring-1 ring-gray-100">
           <div className="grid grid-cols-1 items-stretch overflow-hidden rounded-3xl lg:grid-cols-2">
@@ -237,7 +145,7 @@ export default function ConocenosPage() {
             {[
               {
                 title: "Nuestra Historia",
-                href: "/conocenos/nuestra-historia",
+                href: "/nosotros/nuestra-historia",
                 desc: "Desde 1994 construyendo un proyecto de salud diferente para la Región Norte.",
                 icon: (
                   <svg viewBox="0 0 24 24" fill="none" className="mb-4 h-8 w-8 text-um-green" aria-hidden="true">
@@ -248,8 +156,8 @@ export default function ConocenosPage() {
               },
               {
                 title: "Sobre Nosotros",
-                href: "/conocenos/sobre-nosotros",
-                desc: "Misión, visión, valores y logros de nuestra institución.",
+                href: "/nosotros/sobre-nosotros",
+                desc: "Misión, visión, valores y logros de nuestra institution.",
                 icon: (
                   <svg viewBox="0 0 24 24" fill="none" className="mb-4 h-8 w-8 text-um-green" aria-hidden="true">
                     <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8"></circle>
@@ -259,7 +167,7 @@ export default function ConocenosPage() {
               },
               {
                 title: "Consejo de Administración",
-                href: "/conocenos/consejo-de-administracion",
+                href: "/nosotros/consejo-de-administracion",
                 desc: "Miembros responsables de la dirección administrativa, operativa y financiera.",
                 icon: (
                   <svg viewBox="0 0 24 24" fill="none" className="mb-4 h-8 w-8 text-um-green" aria-hidden="true">
@@ -272,7 +180,7 @@ export default function ConocenosPage() {
               },
               {
                 title: "Complejo Hospitalario",
-                href: "/conocenos/complejo-hospitalario",
+                href: "/nosotros/complejo-hospitalario",
                 desc: "Torres, servicios y capacidades del campus hospitalario.",
                 icon: (
                   <svg viewBox="0 0 24 24" fill="none" className="mb-4 h-8 w-8 text-um-green" aria-hidden="true">
@@ -284,7 +192,7 @@ export default function ConocenosPage() {
               },
               {
                 title: "Residencias Médicas",
-                href: "/conocenos/residencias-medicas",
+                href: "/nosotros/residencias-medicas",
                 desc: "Programas de docencia y especialización avalados por MISPAS y PUCMM.",
                 icon: (
                   <svg viewBox="0 0 24 24" fill="none" className="mb-4 h-8 w-8 text-um-green" aria-hidden="true">

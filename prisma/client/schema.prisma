@@ -1,0 +1,123 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./client"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Doctor {
+  id           Int       @id @default(autoincrement())
+  externalId   Int       @unique // El ID original del JSON/Scraping
+  name         String
+  title        String?
+  specialty    String
+  image        String?
+  rating       Float?    @default(0)
+  phone        String?
+  insurance    Boolean   @default(true)
+  telemedicine Boolean   @default(false)
+  location     String?
+  active       Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime? @updatedAt
+
+  @@index([name])
+  @@index([specialty])
+  @@index([active])
+  @@index([specialty, name])
+}
+
+model CommitteeMember {
+  id        Int      @id @default(autoincrement())
+  name      String
+  role      String
+  image     String?
+  bio       String?
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([order])
+  @@index([active])
+}
+
+model StaffMember {
+  id        Int      @id @default(autoincrement())
+  name      String
+  role      String
+  image     String?
+  type      String // "board", "management", "staff"
+  bio       String?
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([type])
+  @@index([order])
+  @@index([active])
+}
+
+model ContentBlock {
+  id        Int      @id @default(autoincrement())
+  page      String // "home", "conocenos", "investigacion"
+  section   String // "carousel", "hero", "mission"
+  title     String?
+  content   String?
+  image     String?
+  link      String?
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([page, section])
+  @@index([order])
+  @@index([active])
+}
+
+model ResearchPublication {
+  id            Int      @id @default(autoincrement())
+  title         String
+  description   String?
+  image         String?
+  link          String?
+  category      String   @default("Regular") // "Destacada" o "Regular"
+  publishedDate DateTime @default(now())
+  authors       String? // JSON string with author names
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([category])
+  @@index([publishedDate])
+  @@index([active])
+}
+
+model Service {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  image       String
+  link        String
+  buttonText  String
+  type        String   @default("card") // "card" (ServicesSection) or "alternate" (ServicesAlternateSection)
+  isReverse   Boolean  @default(false) // Used for alternate layout
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([type])
+  @@index([order])
+  @@index([active])
+}

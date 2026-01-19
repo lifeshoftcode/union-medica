@@ -2,15 +2,21 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
-        // Simulate login
-        setTimeout(() => setIsLoading(false), 1500);
+
+        // Simulate login delay
+        setTimeout(() => {
+            setIsLoading(false);
+            router.push("/admin/medicos");
+        }, 1500);
     };
 
     return (
