@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { CLINIC_KNOWLEDGE } from "@/lib/knowledge";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
@@ -63,19 +64,32 @@ export async function POST(req: Request) {
             ? `Médicos encontrados relevantes: ${relevantDocs.map(d => `${d.name} (${d.specialty}) - Ubicación: ${d.location || 'Consultorio Principal'}, Tel: ${d.phone || '809-226-8686'}, Acepta Seguro: ${d.insurance ? 'Sí' : 'No'}`).join(" | ")}`
             : "No se encontraron médicos específicos en la DB para esta búsqueda exacta.";
 
+        // Resumen de conocimiento institucional para el prompt
+        const infoInstitucional = `
+        INFORMACIÓN GENERAL DE LA CLÍNICA:
+        - Ubicación: ${CLINIC_KNOWLEDGE.institucion.ubicacion}
+        - Torres y Distribución: ${CLINIC_KNOWLEDGE.infraestructura.tours.map(t => `${t.nombre}: ${t.servicios}`).join(" | ")}
+        - Horarios: ${CLINIC_KNOWLEDGE.horarios.map(h => `${h.area}: ${h.horario}`).join(" | ")}
+        - Misión: ${CLINIC_KNOWLEDGE.institucion.mision}
+        - Contacto Central: ${CLINIC_KNOWLEDGE.institucion.contacto.central} | ${CLINIC_KNOWLEDGE.institucion.contacto.email}
+        `;
+
         const SYSTEM_PROMPT = `Eres el asistente virtual de la Clínica Unión Médica del Norte (UMN) en Santiago, RD. 
-Tu objetivo es ayudar con información sobre servicios, médicos y horarios. 
+Tu objetivo es ayudar con información sobre servicios, médicos, horarios, ubicación y cultura institucional. 
 Eres amable, profesional y conciso.
 
-CONTEXTO DE LA BASE DE DATOS (RAG):
+${infoInstitucional}
+
+CONTEXTO DEL DIRECTORIO MÉDICO (RAG):
 - ESPECIALIDADES DISPONIBLES: ${specialtiesList}
 - MÉDICOS ENCONTRADOS: ${doctorsContext}
 
 INSTRUCCIONES CRÍTICAS:
 1. Si el usuario pregunta por un médico o especialidad y hay datos en "MÉDICOS ENCONTRADOS", DEBES mencionar sus nombres y detalles (consultorio, teléfono).
-2. Usa formato Markdown (negritas, listas) para que la información sea clara.
-3. Si no hay médicos específicos en la lista pero la especialidad existe en "ESPECIALIDADES DISPONIBLES", sugiérele al usuario llamar al (809) 226-8686.
-4. No digas cosas genéricas como "contáctanos para más detalles" si tienes los nombres de los médicos en el contexto de arriba. ¡Dáselos!
+2. Usa la "INFORMACIÓN GENERAL DE LA CLÍNICA" para responder sobre horarios de farmacia, laboratorio, ubicación de torres, misión, etc.
+3. Usa formato Markdown (negritas, listas) para que la información sea clara.
+4. Si no hay médicos específicos en la lista pero la especialidad existe en "ESPECIALIDADES DISPONIBLES", sugiérele al usuario llamar al ${CLINIC_KNOWLEDGE.institucion.contacto.central}.
+5. No digas cosas genéricas como "contáctanos para más detalles" si tienes la información en el contexto. ¡Dásela al usuario!
 
 REGLA DE SEGURIDAD (IMPORTANTE):
 - Solo incluye la advertencia "IMPORTANTE: No soy médico... llama al 911 en emergencias" SI Y SOLO SI el usuario pide consejos médicos, diagnósticos, tratamientos o describe síntomas de dolor/malestar.

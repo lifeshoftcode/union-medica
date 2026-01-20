@@ -8,10 +8,10 @@ import ChatWidget from "@/components/ChatWidget";
 export default function ConditionalLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
 
-    // Si la ruta empieza con /admin, no mostramos el layout público
-    const isAdmin = pathname?.startsWith("/admin");
+    // Si la ruta empieza con /admin o es /access, no mostramos el layout público
+    const isSpecialPath = pathname?.startsWith("/admin") || pathname === "/access";
 
-    if (isAdmin) {
+    if (isSpecialPath) {
         return <>{children}</>;
     }
 
