@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { verifyAccessCode } from '@/app/actions/auth';
 
-export default function AccessPage() {
+function AccessForm() {
     const [code, setCode] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -25,7 +25,7 @@ export default function AccessPage() {
             } else {
                 setError(result.error || 'Código inválido');
             }
-        } catch (err) {
+        } catch {
             setError('Ocurrió un error. Inténtalo de nuevo.');
         } finally {
             setIsLoading(false);
@@ -121,5 +121,17 @@ export default function AccessPage() {
         }
       `}</style>
         </main>
+    );
+}
+
+export default function AccessPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4">
+                <div className="w-12 h-12 border-4 border-[#00A859]/20 border-t-[#00A859] rounded-full animate-spin" />
+            </div>
+        }>
+            <AccessForm />
+        </Suspense>
     );
 }

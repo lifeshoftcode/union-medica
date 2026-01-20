@@ -164,7 +164,7 @@ const ChatWidget = () => {
     const processMessage = async (text: string) => {
         if (!text.trim() || isLoading) return;
 
-        const userMessage = { role: 'user', text };
+        const userMessage: { role: 'user' | 'assistant', text: string } = { role: 'user', text };
         const currentChat = [...chat, userMessage];
         setChat(currentChat);
         setMessage("");
