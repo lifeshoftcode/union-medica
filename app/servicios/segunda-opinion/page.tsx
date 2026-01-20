@@ -64,7 +64,7 @@ export default function SegundaOpinionPage() {
                             <div className="pt-4">
                                 <Link
                                     href="/segunda-opinion/nueva"
-                                    className="inline-flex items-center gap-3 bg-um-green text-white px-8 py-4 rounded-2xl font-black text-lg shadow-xl shadow-um-green/20 hover:bg-um-dark hover:shadow-2xl transition-all active:scale-95 group"
+                                    className="inline-flex items-center gap-3 bg-um-green text-white px-8 py-4 rounded-2xl font-black text-lg shadow-xl shadow-um-green/20 hover:bg-[#12a14b] active:bg-[#0b7033] focus:ring-4 focus:ring-um-green/30 outline-none transition-all active:scale-95 group"
                                 >
                                     <span>Solicitar Segunda Opinión</span>
                                     <svg className="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -143,7 +143,7 @@ export default function DoctorsClient({
                             </select>
                         </div>
                         <div className="flex items-end">
-                            <button className="w-full rounded-2xl bg-um-green px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-um-green/20 hover:bg-um-dark hover:shadow-um-dark/10 transition-all active:scale-[0.98]">
+                            <button className="w-full rounded-2xl bg-um-green px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-um-green/20 hover:bg-[#12a14b] active:bg-[#0b7033] focus:ring-4 focus:ring-um-green/30 outline-none transition-all active:scale-[0.98]">
                                 Filtrar Resultados
                             </button>
                         </div>
@@ -252,7 +252,7 @@ export default function DoctorsClient({
                                 <div className="flex w-full lg:w-48 flex-col gap-2 lg:justify-center border-t border-gray-100 lg:border-t-0 lg:border-l lg:pl-6 pt-4 lg:pt-0">
                                     <Link
                                         href={`/medicos/${doc.externalId}`}
-                                        className="flex items-center justify-center gap-2 rounded-xl bg-um-green px-4 py-2.5 text-[0.8rem] font-bold text-white shadow-md shadow-um-green/10 transition-all hover:bg-um-dark active:scale-[0.98]"
+                                        className="flex items-center justify-center gap-2 rounded-xl bg-um-green px-4 py-2.5 text-[0.8rem] font-bold text-white shadow-md shadow-um-green/10 transition-all hover:bg-[#12a14b] active:bg-[#0b7033] focus:ring-4 focus:ring-um-green/30 outline-none active:scale-[0.98]"
                                     >
                                         Agendar Cita
                                     </Link>

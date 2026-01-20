@@ -98,7 +98,7 @@ export default async function DoctorProfilePage({ params }: Props) {
                                 {doctor.phone && (
                                     <a
                                         href={`tel:${doctor.phone}`}
-                                        className="group flex items-center justify-center gap-2 w-full bg-um-green text-white px-6 py-4 rounded-2xl font-bold shadow-lg shadow-um-green/20 hover:bg-um-dark transition-all active:scale-[0.98]"
+                                        className="group flex items-center justify-center gap-2 w-full bg-um-green text-white px-6 py-4 rounded-2xl font-bold shadow-lg shadow-um-green/20 hover:bg-[#12a14b] active:bg-[#0b7033] focus:ring-4 focus:ring-um-green/30 outline-none transition-all active:scale-[0.98]"
                                     >
                                         <svg className="w-5 h-5 transition-transform group-hover:rotate-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -200,8 +200,7 @@ export default async function DoctorProfilePage({ params }: Props) {
                             <section className="space-y-4">
                                 <h2 className="text-2xl font-black text-gray-900">Sobre el Especialista</h2>
                                 <p className="text-gray-600 leading-relaxed text-lg italic">
-                                    "Comprometido con brindar una atención médica de la más alta calidad, combinando experiencia clínica con un trato humano y empático para todos mis pacientes."
-                                </p>
+                                    &quot;Comprometido con brindar una atención médica de la más alta calidad, combinando experiencia clínica con un trato humano y empático para todos mis pacientes.&quot;                                </p>
                                 <div className="flex flex-wrap gap-3 pt-2">
                                     <span className="flex items-center gap-2 rounded-xl bg-gray-100 px-4 py-2 text-sm font-bold text-gray-700">
                                         <span className="w-2 h-2 rounded-full bg-um-green"></span>
