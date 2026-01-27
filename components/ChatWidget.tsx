@@ -35,6 +35,22 @@ const CONTEXTUAL_ACTIONS = [
             { label: '🔬 Imágenes Médicas', query: '¿Qué servicios de imágenes tienen?' },
             { label: '📅 Agendar Cita', query: '¿Cómo puedo agendar una cita?' }
         ]
+    },
+    {
+        keywords: ['cancer', 'oncolog', 'quimio', 'tumor', 'radioter'],
+        actions: [
+            { label: '🎗️ Centro Oncológico', query: '¿Qué servicios ofrece el Centro de Oncología?' },
+            { label: '📍 Torre E', query: '¿Qué hay en la Torre E?' },
+            { label: '📅 Citas', query: '¿Cómo agendar cita en Oncología?' }
+        ]
+    },
+    {
+        keywords: ['ayuda', 'social', 'fundacion', 'donar', 'pobre', 'operativo', 'necesit'],
+        actions: [
+            { label: '🤝 Fundación UMN', query: '¿Qué hace la Fundación Unión Médica?' },
+            { label: '📅 Eventos', query: '¿Cuáles son los próximos operativos médicos?' },
+            { label: '✉️ Contacto Social', query: '¿Cómo contacto a la fundación?' }
+        ]
     }
 ];
 
@@ -50,6 +66,32 @@ const SUGGESTIONS = [
             "¿Qué especialistas en Cardiología hay?",
             "¿Busco un contacto de Ginecología?",
             "¿Quiénes son los médicos de Pediatría?"
+        ]
+    },
+    {
+        category: "Emergencias/24h",
+        icon: (
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+        ),
+        questions: [
+            "¿Qué servicios están disponibles 24 horas?",
+            "¿Dónde está la emergencia de adultos?",
+            "¿Tienen servicio de ambulancia?"
+        ]
+    },
+    {
+        category: "Especializados",
+        icon: (
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.673.337a4 4 0 01-2.506.327l-1.98-.396a14.917 14.917 0 00-4.484.051l-.703.116a2 2 0 00-1.597 2.327l.084.503a2 2 0 002.327 1.63l.729-.122a13 13 0 011.536.469l.114.024a4 4 0 002.996-1.041l.933-.933a2 2 0 012.128-.469l1.12.373a6 6 0 004.242 0l1.12-.373a2 2 0 012.128.469l.933.933a4 4 0 002.996 1.041l.114-.024a13 13 0 011.536-.469l.729.122a2 2 0 002.327-1.63l.084-.503a2 2 0 00-1.597-2.327l-.703-.116z" />
+            </svg>
+        ),
+        questions: [
+            "¿Qué es la Unidad Respiratoria Integral (URI)?",
+            "¿Tienen servicios de oncología?",
+            "¿Qué seguros aceptan para hemodiálisis?"
         ]
     },
     {
@@ -77,6 +119,19 @@ const SUGGESTIONS = [
             "¿Dónde están ubicados?",
             "¿Qué servicios hay en la Torre C?",
             "¿Cómo llego a las Oficinas Administrativas?"
+        ]
+    },
+    {
+        category: "Institucional",
+        icon: (
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+        ),
+        questions: [
+            "¿Qué servicios hay en la nueva Torre E?",
+            "¿Qué labor realiza la Fundación UMN?",
+            "¿Cuáles son los valores institucionales?"
         ]
     }
 ];
