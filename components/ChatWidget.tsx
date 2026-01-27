@@ -292,10 +292,16 @@ const ChatWidget = () => {
 
             {/* Chat Window */}
             {isOpen && (
-                <div className={`fixed z-[1200] transition-all duration-500 ease-in-out flex flex-col overflow-hidden animate-fade-in-up origin-bottom-right shadow-3xl border border-gray-100 bg-white/95 backdrop-blur-md rounded-[2rem] ${isExpanded
-                    ? "inset-2 md:inset-x-4 md:inset-y-1 lg:inset-x-32 lg:inset-y-1 w-auto h-auto max-h-none"
-                    : "bottom-24 right-6 w-[calc(100vw-3rem)] md:w-[380px] h-[70vh] max-h-[580px]"
+                <div className={`fixed z-[1200] transition-all duration-500 ease-in-out flex flex-col overflow-hidden animate-fade-in-up origin-bottom shadow-3xl border border-gray-100 bg-white/95 backdrop-blur-md ${isExpanded
+                    ? "inset-x-0 bottom-0 top-[10vh] md:inset-2 md:inset-x-4 md:inset-y-1 lg:inset-x-32 lg:inset-y-1 w-auto h-auto max-h-none rounded-t-[2.5rem] md:rounded-[2rem] rounded-b-none md:rounded-b-[2rem]"
+                    : "bottom-24 right-6 w-[calc(100vw-3rem)] md:w-[380px] h-[70vh] max-h-[580px] rounded-[2rem] origin-bottom-right"
                     }`}>
+                    {/* Drawer Handle - Only visible when expanded on mobile */}
+                    {isExpanded && (
+                        <div className="md:hidden flex justify-center pt-2 pb-1 bg-um-green">
+                            <div className="w-12 h-1.5 bg-white/30 rounded-full" />
+                        </div>
+                    )}
                     {/* Header - Modern Solid Green */}
                     <div className="p-5 bg-um-green text-white flex items-center justify-between shadow-md relative z-20">
                         <div className="flex items-center gap-4 relative">
@@ -339,7 +345,7 @@ const ChatWidget = () => {
                             </div>
                             <button
                                 onClick={() => setIsExpanded(!isExpanded)}
-                                className="w-9 h-9 rounded-full hover:bg-white/20 active:bg-white/30 focus:ring-2 focus:ring-white/40 outline-none transition-all flex items-center justify-center group hidden md:flex"
+                                className="w-9 h-9 rounded-full hover:bg-white/20 active:bg-white/30 focus:ring-2 focus:ring-white/40 outline-none transition-all flex items-center justify-center group"
                                 title={isExpanded ? "Contraer" : "Expandir"}
                             >
                                 {isExpanded ? (
@@ -366,7 +372,7 @@ const ChatWidget = () => {
                     {/* Messages Area - Refined Spacing */}
                     <div
                         ref={scrollRef}
-                        className={`flex-1 overflow-y-auto p-5 space-y-5 bg-[#fcfdfe]/50 custom-scrollbar selection:bg-um-green selection:text-white transition-all ${isExpanded ? 'md:px-20 lg:px-40' : ''}`}
+                        className={`flex-1 overflow-y-auto p-5 space-y-5 bg-[#fcfdfe]/50 custom-scrollbar selection:bg-um-green selection:text-white transition-all ${isExpanded ? 'md:px-20 lg:px-40 pb-10' : ''}`}
                     >
                         {chat.map((msg, i) => {
                             const isMedicalWarning = msg.role === 'assistant' && (msg.text.includes('911') || msg.text.includes('médico') || msg.text.includes('emergencia'));
