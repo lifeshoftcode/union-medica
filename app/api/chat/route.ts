@@ -29,71 +29,81 @@ export async function POST(req: Request) {
         }
 
         // --- RAG: Fetch relevant data from DB ---
-        const keywords = lastMessage
-            .toLowerCase()
-            .replace(/[?¿!¡,.]/g, "")
-            .split(/\s+/)
-            .filter((word: string) => word.length > 3);
+        let specialtiesList = "";
+        let contextParts = "";
+        let relevantResearch: { title: string }[] = [];
 
-        const [specialties, relevantDocs, relevantServices, relevantResearch, relevantStaff, relevantCommittee] = await Promise.all([
-            prisma.doctor.findMany({ select: { specialty: true }, distinct: ['specialty'], where: { active: true } }),
-            prisma.doctor.findMany({
-                where: {
-                    active: true,
-                    AND: keywords.length > 0 ? [
-                        { OR: keywords.map((kw: string) => ({ OR: [{ name: { contains: kw } }, { specialty: { contains: kw } }] })) }
-                    ] : []
-                },
-                take: 5,
-                select: { name: true, specialty: true, location: true, phone: true, insurance: true }
-            }),
-            prisma.service.findMany({
-                where: {
-                    active: true,
-                    AND: keywords.length > 0 ? [
-                        { OR: keywords.map((kw: string) => ({ OR: [{ title: { contains: kw } }, { description: { contains: kw } }] })) }
-                    ] : []
-                },
-                take: 5
-            }),
-            prisma.researchPublication.findMany({
-                where: {
-                    active: true,
-                    AND: keywords.length > 0 ? [
-                        { OR: keywords.map((kw: string) => ({ OR: [{ title: { contains: kw } }, { description: { contains: kw } }] })) }
-                    ] : []
-                },
-                take: 3
-            }),
-            prisma.staffMember.findMany({
-                where: {
-                    active: true,
-                    AND: keywords.length > 0 ? [
-                        { OR: keywords.map((kw: string) => ({ name: { contains: kw } })) }
-                    ] : []
-                },
-                take: 4
-            }),
-            prisma.committeeMember.findMany({
-                where: {
-                    active: true,
-                    AND: keywords.length > 0 ? [
-                        { OR: keywords.map((kw: string) => ({ name: { contains: kw } })) }
-                    ] : []
-                },
-                take: 4
-            })
-        ]);
+        try {
+            const keywords = lastMessage
+                .toLowerCase()
+                .replace(/[?¿!¡,.]/g, "")
+                .split(/\s+/)
+                .filter((word: string) => word.length > 3);
 
-        const specialtiesList = specialties.map(s => s.specialty).join(", ");
+            const [specialties, relevantDocs, relevantServices, relevantResearchData, relevantStaff, relevantCommittee] = await Promise.all([
+                prisma.doctor.findMany({ select: { specialty: true }, distinct: ['specialty'], where: { active: true } }),
+                prisma.doctor.findMany({
+                    where: {
+                        active: true,
+                        AND: keywords.length > 0 ? [
+                            { OR: keywords.map((kw: string) => ({ OR: [{ name: { contains: kw } }, { specialty: { contains: kw } }] })) }
+                        ] : []
+                    },
+                    take: 5,
+                    select: { name: true, specialty: true, location: true, phone: true, insurance: true }
+                }),
+                prisma.service.findMany({
+                    where: {
+                        active: true,
+                        AND: keywords.length > 0 ? [
+                            { OR: keywords.map((kw: string) => ({ OR: [{ title: { contains: kw } }, { description: { contains: kw } }] })) }
+                        ] : []
+                    },
+                    take: 5
+                }),
+                prisma.researchPublication.findMany({
+                    where: {
+                        active: true,
+                        AND: keywords.length > 0 ? [
+                            { OR: keywords.map((kw: string) => ({ OR: [{ title: { contains: kw } }, { description: { contains: kw } }] })) }
+                        ] : []
+                    },
+                    take: 3
+                }),
+                prisma.staffMember.findMany({
+                    where: {
+                        active: true,
+                        AND: keywords.length > 0 ? [
+                            { OR: keywords.map((kw: string) => ({ name: { contains: kw } })) }
+                        ] : []
+                    },
+                    take: 4
+                }),
+                prisma.committeeMember.findMany({
+                    where: {
+                        active: true,
+                        AND: keywords.length > 0 ? [
+                            { OR: keywords.map((kw: string) => ({ name: { contains: kw } })) }
+                        ] : []
+                    },
+                    take: 4
+                })
+            ]);
 
-        const contextParts = [
-            relevantDocs.length > 0 ? `MÉDICOS: ${relevantDocs.map(d => `${d.name} (${d.specialty})`).join(" | ")}` : "",
-            relevantServices.length > 0 ? `SERVICIOS: ${relevantServices.map(s => s.title).join(" | ")}` : "",
-            relevantResearch.length > 0 ? `INVESTIGACIONES: ${relevantResearch.map(r => r.title).join(" | ")}` : "",
-            relevantStaff.length > 0 ? `STAFF: ${relevantStaff.map(s => `${s.name} (${s.role})`).join(" | ")}` : "",
-            relevantCommittee.length > 0 ? `COMITÉ: ${relevantCommittee.map(c => `${c.name} (${c.role})`).join(" | ")}` : ""
-        ].filter(Boolean).join("\n");
+            specialtiesList = specialties.map(s => s.specialty).join(", ");
+            relevantResearch = relevantResearchData;
+
+            contextParts = [
+                relevantDocs.length > 0 ? `MÉDICOS: ${relevantDocs.map(d => `${d.name} (${d.specialty})`).join(" | ")}` : "",
+                relevantServices.length > 0 ? `SERVICIOS: ${relevantServices.map(s => s.title).join(" | ")}` : "",
+                relevantResearch.length > 0 ? `INVESTIGACIONES: ${relevantResearch.map(r => r.title).join(" | ")}` : "",
+                relevantStaff.length > 0 ? `STAFF: ${relevantStaff.map(s => `${s.name} (${s.role})`).join(" | ")}` : "",
+                relevantCommittee.length > 0 ? `COMITÉ: ${relevantCommittee.map(c => `${c.name} (${c.role})`).join(" | ")}` : ""
+            ].filter(Boolean).join("\n");
+        } catch (dbError) {
+            console.error("⚠️ Error consultando la base de datos (SQLite en Vercel?):", dbError);
+            // Si falla la DB, continuamos con la información estática de CLINIC_KNOWLEDGE
+        }
 
 
         // Resumen de conocimiento institucional para el prompt
