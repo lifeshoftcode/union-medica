@@ -37,17 +37,26 @@ export async function searchDoctors({
     itemsPerPage = 10,
     activeOnly = true,
 }: DoctorSearchParams = {}): Promise<DoctorSearchResult> {
+    if (!prisma) {
+        return {
+            doctors: [],
+            totalCount: 0,
+            totalPages: 0,
+            currentPage: page,
+        };
+    }
+
     // Build the where clause for filtering
     const where: {
-        OR?: Array<{ name: { contains: string; mode: 'insensitive' } } | { specialty: { contains: string; mode: 'insensitive' } }>;
+        OR?: Array<{ name: { contains: string } } | { specialty: { contains: string } }>;
         specialty?: string;
         active?: boolean;
     } = {};
 
     if (searchTerm) {
         where.OR = [
-            { name: { contains: searchTerm, mode: 'insensitive' } },
-            { specialty: { contains: searchTerm, mode: 'insensitive' } },
+            { name: { contains: searchTerm } },
+            { specialty: { contains: searchTerm } },
         ];
     }
 
@@ -85,6 +94,8 @@ export async function searchDoctors({
 }
 
 export async function getSpecialties(): Promise<string[]> {
+    if (!prisma) return [];
+
     const doctors = await prisma.doctor.findMany({
         select: {
             specialty: true,
