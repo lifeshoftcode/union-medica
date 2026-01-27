@@ -64,7 +64,7 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-[2000] bg-white/95 backdrop-blur-md border-b border-gray-100 h-20 md:h-[88px]">
+      <header className="fixed inset-x-0 top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 h-20 md:h-[88px]">
         <div className="max-w-7xl mx-auto flex items-center justify-between px-6 h-full">
           <Link href="/" className="flex items-center transition-all hover:scale-[1.02] active:scale-95" onClick={() => setIsMenuOpen(false)}>
             <div className="relative h-10 md:h-12 w-48 md:w-56">
@@ -195,7 +195,7 @@ const Navbar = () => {
       </header>
 
       {/* Mobile Menu Drawer - Outside the header container to avoid clipping */}
-      <div className={`fixed inset-0 bg-white z-[1500] lg:hidden transition-all duration-500 ease-in-out ${isMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-[100%] opacity-0'}`}>
+      <div className={`fixed inset-0 bg-white z-40 lg:hidden transition-all duration-500 ease-in-out ${isMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-[100%] opacity-0'}`}>
         <div className="flex flex-col h-full pt-20 overflow-y-auto px-6 pb-12">
           <div className="flex flex-col space-y-2 mt-4">
             {MENU_ITEMS.map((menu) => (

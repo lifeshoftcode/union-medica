@@ -144,8 +144,17 @@ const ChatWidget = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [activeTab, setActiveTab] = useState(0);
     const [chat, setChat] = useState<{ role: 'user' | 'assistant', text: string }[]>([]);
+    const [isMobile, setIsMobile] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
+
+    // Detect mobile
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     // Cerrar menú al hacer clic fuera
     useEffect(() => {
@@ -188,9 +197,9 @@ const ChatWidget = () => {
         return match ? match.actions : [];
     };
 
-    // Bloquear scroll del body cuando está expandido
+    // Bloquear scroll del body cuando está abierto en móvil o expandido
     useEffect(() => {
-        if (isOpen && isExpanded) {
+        if (isOpen && (isExpanded || isMobile)) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = '';
@@ -199,7 +208,7 @@ const ChatWidget = () => {
         return () => {
             document.body.style.overflow = '';
         };
-    }, [isOpen, isExpanded]);
+    }, [isOpen, isExpanded, isMobile]);
 
     // Respuestas locales para cuando no hay API Key
     const getLocalResponse = (msg: string) => {
@@ -270,7 +279,7 @@ const ChatWidget = () => {
             {/* Backdrop Overlay */}
             {isOpen && (
                 <div
-                    className={`fixed inset-0 bg-black/20 ${isExpanded ? 'backdrop-blur-sm' : ''} z-[1100] animate-fade-in`}
+                    className={`fixed inset-0 bg-black/20 ${isExpanded ? 'backdrop-blur-sm' : ''} z-[3100] animate-fade-in`}
                     onClick={() => setIsOpen(false)}
                 />
             )}
@@ -278,7 +287,7 @@ const ChatWidget = () => {
             {/* FAB Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`fixed bottom-6 right-6 z-[1000] rounded-full shadow-2xl p-4 md:px-6 md:py-4 bg-um-green text-white font-bold hover:bg-[#0b7033] active:bg-[#095c2a] focus:ring-4 focus:ring-um-green/30 outline-none transition-all flex items-center gap-3 group border border-white/20`}
+                className={`fixed bottom-6 right-6 z-[3000] rounded-full shadow-2xl p-4 md:px-6 md:py-4 bg-um-green text-white font-bold hover:bg-[#0b7033] active:bg-[#095c2a] focus:ring-4 focus:ring-um-green/30 outline-none transition-all flex items-center gap-3 group border border-white/20`}
                 aria-label="Chatea con UMN"
             >
                 <div className="relative flex items-center justify-center">
@@ -292,16 +301,14 @@ const ChatWidget = () => {
 
             {/* Chat Window */}
             {isOpen && (
-                <div className={`fixed z-[1200] transition-all duration-500 ease-in-out flex flex-col overflow-hidden animate-fade-in-up origin-bottom shadow-3xl border border-gray-100 bg-white/95 backdrop-blur-md ${isExpanded
-                    ? "inset-x-0 bottom-0 top-[10vh] md:inset-2 md:inset-x-4 md:inset-y-1 lg:inset-x-32 lg:inset-y-1 w-auto h-auto max-h-none rounded-t-[2.5rem] md:rounded-[2rem] rounded-b-none md:rounded-b-[2rem]"
-                    : "bottom-24 right-6 w-[calc(100vw-3rem)] md:w-[380px] h-[70vh] max-h-[580px] rounded-[2rem] origin-bottom-right"
+                <div className={`fixed z-[3200] transition-all duration-500 ease-in-out flex flex-col overflow-hidden animate-fade-in-up origin-bottom shadow-3xl border border-gray-200 md:border-gray-100 bg-white md:bg-white/95 backdrop-blur-md ${isExpanded
+                    ? "inset-x-0 bottom-0 top-[3vh] md:inset-2 md:inset-x-4 md:inset-y-1 lg:inset-x-32 lg:inset-y-1 w-auto h-auto max-h-none rounded-t-[2.5rem] md:rounded-[2rem] rounded-b-none md:rounded-b-[2rem]"
+                    : "inset-x-0 bottom-0 top-[3vh] md:inset-auto md:bottom-24 md:right-6 md:w-[380px] md:h-[70vh] md:max-h-[580px] rounded-t-[2.5rem] md:rounded-[2rem] rounded-b-none md:rounded-b-[2rem] origin-bottom-right"
                     }`}>
-                    {/* Drawer Handle - Only visible when expanded on mobile */}
-                    {isExpanded && (
-                        <div className="md:hidden flex justify-center pt-2 pb-1 bg-um-green">
-                            <div className="w-12 h-1.5 bg-white/30 rounded-full" />
-                        </div>
-                    )}
+                    {/* Drawer Handle - Only visible on mobile */}
+                    <div className="md:hidden flex justify-center pt-3 pb-1.5 bg-um-green flex-shrink-0">
+                        <div className="w-12 h-1.5 bg-white/30 rounded-full" />
+                    </div>
                     {/* Header - Modern Solid Green */}
                     <div className="p-5 bg-um-green text-white flex items-center justify-between shadow-md relative z-20">
                         <div className="flex items-center gap-4 relative">
@@ -330,7 +337,7 @@ const ChatWidget = () => {
 
                                 {/* Dropdown Menu */}
                                 {showMenu && (
-                                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-[1300] animate-fade-in-up origin-top-right">
+                                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-[3300] animate-fade-in-up origin-top-right">
                                         <button
                                             onClick={clearChat}
                                             className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors text-left"
@@ -345,7 +352,7 @@ const ChatWidget = () => {
                             </div>
                             <button
                                 onClick={() => setIsExpanded(!isExpanded)}
-                                className="w-9 h-9 rounded-full hover:bg-white/20 active:bg-white/30 focus:ring-2 focus:ring-white/40 outline-none transition-all flex items-center justify-center group"
+                                className="hidden md:flex w-9 h-9 rounded-full hover:bg-white/20 active:bg-white/30 focus:ring-2 focus:ring-white/40 outline-none transition-all items-center justify-center group"
                                 title={isExpanded ? "Contraer" : "Expandir"}
                             >
                                 {isExpanded ? (
@@ -372,7 +379,7 @@ const ChatWidget = () => {
                     {/* Messages Area - Refined Spacing */}
                     <div
                         ref={scrollRef}
-                        className={`flex-1 overflow-y-auto p-5 space-y-5 bg-[#fcfdfe]/50 custom-scrollbar selection:bg-um-green selection:text-white transition-all ${isExpanded ? 'md:px-20 lg:px-40 pb-10' : ''}`}
+                        className={`flex-1 overflow-y-auto p-5 space-y-5 bg-[#fcfdfe]/50 custom-scrollbar selection:bg-um-green selection:text-white transition-all ${(isExpanded || isMobile) ? 'md:px-20 lg:px-40 pb-10' : ''}`}
                     >
                         {chat.map((msg, i) => {
                             const isMedicalWarning = msg.role === 'assistant' && (msg.text.includes('911') || msg.text.includes('médico') || msg.text.includes('emergencia'));
@@ -402,17 +409,18 @@ const ChatWidget = () => {
                                 </div>
                             );
                         })}
-                        {/* Discovery Deck: Initial Suggested Questions (Only in Expanded Mode) */}
+                        {/* Discovery Deck: Initial Suggested Questions */}
                         {
-                            chat.length === 1 && !isLoading && isExpanded && (
+                            chat.length === 1 && !isLoading && (isExpanded || isMobile) && (
                                 <div className="space-y-4 animate-fade-in [animation-delay:0.3s]">
                                     <div className="space-y-4 pt-2">
-                                        <div className="flex flex-wrap gap-2 pt-2 border-t border-gray-100">
+                                        {/* Category Tabs - Horizontal Scroll on Mobile */}
+                                        <div className="flex overflow-x-auto no-scrollbar md:flex-wrap gap-2 pt-2 border-t border-gray-100 pb-2 -mx-2 px-2">
                                             {SUGGESTIONS.map((s, idx) => (
                                                 <button
                                                     key={s.category}
                                                     onClick={() => setActiveTab(idx)}
-                                                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-black uppercase tracking-wider transition-all border ${activeTab === idx
+                                                    className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-2 md:px-3 md:py-1.5 rounded-full text-[11px] font-black uppercase tracking-wider transition-all border ${activeTab === idx
                                                         ? 'bg-um-green text-white border-um-green shadow-md shadow-um-green/20'
                                                         : 'bg-white text-gray-500 border-gray-100 hover:border-um-green/30'
                                                         }`}
@@ -423,16 +431,16 @@ const ChatWidget = () => {
                                             ))}
                                         </div>
 
-                                        <div className="space-y-2">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                                             {SUGGESTIONS[activeTab].questions.map((q, i) => (
                                                 <button
                                                     key={i}
                                                     onClick={() => processMessage(q)}
-                                                    className="w-full flex items-center justify-between gap-3 p-3 text-left bg-white border border-gray-100 rounded-2xl text-[13px] font-semibold text-gray-700 hover:border-um-green/50 hover:bg-um-green/5 transition-all group animate-fade-in-up"
+                                                    className="w-full flex items-center justify-between gap-3 p-4 md:p-3 text-left bg-white border border-gray-100 rounded-2xl text-[13px] font-semibold text-gray-700 hover:border-um-green/50 hover:bg-um-green/5 transition-all group animate-fade-in-up shadow-sm md:shadow-none"
                                                     style={{ animationDelay: `${(i + 1) * 0.1}s` }}
                                                 >
                                                     <span className="flex-1 opacity-90 group-hover:opacity-100">{q}</span>
-                                                    <svg className="w-4 h-4 text-um-green opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <svg className="w-4 h-4 text-um-green opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                                     </svg>
                                                 </button>
@@ -445,9 +453,9 @@ const ChatWidget = () => {
 
                         {/* Dynamic Contextual Actions (Post-Alerta or Specific Topics) */}
                         {!isLoading && chat.length > 1 && getContextualActions().length > 0 && (
-                            <div className={`space-y-3 animate-fade-in ${isExpanded ? 'md:px-0' : ''}`}>
+                            <div className="space-y-3 animate-fade-in">
                                 <p className="text-[10px] font-black uppercase tracking-[0.15em] text-gray-400 ml-2">Sugerencias recomendadas</p>
-                                <div className="flex flex-wrap gap-2">
+                                <div className="flex overflow-x-auto no-scrollbar md:flex-wrap gap-2 pb-2">
                                     {getContextualActions().map((action, idx) => (
                                         <button
                                             key={idx}
@@ -475,7 +483,7 @@ const ChatWidget = () => {
                     </div>
 
                     {/* Input Area - Modern and Aesthetic */}
-                    <div className={`p-5 bg-white/80 border-t border-gray-50/50 transition-all ${isExpanded ? 'md:px-20 lg:px-40' : ''}`}>
+                    <div className={`p-5 bg-white/80 border-t border-gray-50/50 transition-all ${(isExpanded || isMobile) ? 'md:px-20 lg:px-40' : ''}`}>
                         <form className="flex gap-2 items-center relative" onSubmit={handleSend}>
                             <input
                                 type="text"
