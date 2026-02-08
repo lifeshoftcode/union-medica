@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
         hostname: 'storage.googleapis.com',
       },
     ],
+    formats: ['image/avif', 'image/webp'],
   },
   serverExternalPackages: ['better-sqlite3'],
 };

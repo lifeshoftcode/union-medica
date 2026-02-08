@@ -1,10 +1,11 @@
 import type { Service } from "@/prisma/client";
+import Image from "next/image";
 
 interface ServicesAlternateSectionProps {
     services: Service[];
 }
 
-/* eslint-disable @next/next/no-img-element */
+
 const ServicesAlternateSection = ({ services }: ServicesAlternateSectionProps) => {
     return (
         <section className="py-24 bg-white overflow-hidden">
@@ -14,11 +15,13 @@ const ServicesAlternateSection = ({ services }: ServicesAlternateSectionProps) =
                         key={service.id || idx}
                         className={`flex flex-col md:flex-row items-center gap-12 ${service.isReverse ? 'md:flex-row' : 'md:flex-row-reverse'}`}
                     >
-                        <div className="w-full md:w-1/2 aspect-video relative rounded-3xl overflow-hidden shadow-2xl group">
-                            <img
+                        <div className="w-full md:w-1/2 aspect-video relative rounded-3xl overflow-hidden shadow-2xl group bg-gray-100">
+                            <Image
                                 src={service.image}
                                 alt={service.title}
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                fill
+                                className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                sizes="(max-width: 768px) 100vw, 50vw"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                         </div>

@@ -83,11 +83,12 @@ export default async function DoctorProfilePage({ params }: Props) {
                         <div className="w-full md:w-1/3 lg:w-1/4 bg-gray-50/50 p-8 flex flex-col items-center border-b md:border-b-0 md:border-r border-gray-100">
                             <div className="relative group mb-8">
                                 <div className="absolute -inset-1 bg-gradient-to-tr from-um-green to-um-terciario rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-                                <div className="relative h-64 w-52 overflow-hidden rounded-2xl shadow-2xl bg-white ring-4 ring-white">
+                                <div className="relative h-64 w-52 overflow-hidden rounded-2xl shadow-2xl bg-gray-100 ring-4 ring-white">
                                     <Image
                                         alt={doctor.name}
                                         src={doctor.image}
                                         fill
+                                        priority
                                         className="object-cover transition duration-700 group-hover:scale-110"
                                         sizes="(max-width: 768px) 208px, 208px"
                                     />

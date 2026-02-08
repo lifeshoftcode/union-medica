@@ -4,6 +4,8 @@ interface ServicesSectionProps {
     services: Service[];
 }
 
+import Image from "next/image";
+
 const ServicesSection = ({ services }: ServicesSectionProps) => {
     return (
         <section className="py-24 bg-zinc-50">
@@ -14,10 +16,15 @@ const ServicesSection = ({ services }: ServicesSectionProps) => {
                             key={service.id || idx}
                             className="group bg-white rounded-2xl shadow-xl shadow-black/5 overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
                         >
-                            <div
-                                className="h-56 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                                style={{ backgroundImage: `url(${service.image})` }}
-                            />
+                            <div className="h-56 relative overflow-hidden bg-gray-100">
+                                <Image
+                                    src={service.image}
+                                    alt={service.title}
+                                    fill
+                                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                />
+                            </div>
                             <div className="p-8 flex-grow flex flex-col">
                                 <h3 className="text-2xl font-bold mb-3 text-um-dark group-hover:text-um-green transition-colors">
                                     {service.title}

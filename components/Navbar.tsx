@@ -74,6 +74,7 @@ const Navbar = () => {
                 fill
                 className="object-contain object-left"
                 priority
+                sizes="(max-width: 768px) 192px, 224px"
               />
             </div>
           </Link>

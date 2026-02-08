@@ -1,9 +1,17 @@
+import Image from "next/image";
+import newsParallaxImg from "@/public/images/home/news-parallax.webp";
+
 const ParallaxNewsSection = () => {
     return (
         <section className="relative h-[600px] w-full overflow-hidden group">
-            <div
-                className="absolute inset-0 parallax-bg"
-                style={{ backgroundImage: 'url("/images/home/news-parallax.webp")' }}
+            <Image
+                src={newsParallaxImg}
+                alt="Fondo de noticias médicas"
+                fill
+                priority
+                placeholder="blur"
+                className="object-cover select-none pointer-events-none"
+                sizes="100vw"
             />
             <div className="absolute inset-0 bg-black/60 transition-colors group-hover:bg-black/50" />
             <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
