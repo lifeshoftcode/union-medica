@@ -24,7 +24,7 @@ export default async function ConocenosPage() {
         <section className="mt-16 sm:mt-20 rounded-3xl bg-white shadow-sm ring-1 ring-gray-100">
           <div className="grid grid-cols-1 items-stretch overflow-hidden rounded-3xl lg:grid-cols-2">
             <div
-              className="min-h-[260px] bg-[url('/images/conocenos/fundacion.jpg')] bg-cover bg-center"
+              className="min-h-[260px] bg-[url('/images/conocenos/fundacion.webp')] bg-cover bg-center"
               aria-hidden="true"
             ></div>
             <div className="p-8 sm:p-10">

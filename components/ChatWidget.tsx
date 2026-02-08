@@ -143,7 +143,12 @@ const ChatWidget = () => {
     const [message, setMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [activeTab, setActiveTab] = useState(0);
-    const [chat, setChat] = useState<{ role: 'user' | 'assistant', text: string }[]>([]);
+    const [chat, setChat] = useState<{
+        role: 'user' | 'assistant',
+        text: string,
+        isMedicalWarning?: boolean,
+        suggestedActions?: { label: string, query: string }[]
+    }[]>([]);
     const [isMobile, setIsMobile] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
@@ -187,15 +192,6 @@ const ChatWidget = () => {
         }
     }, [chat, isOpen]);
 
-    // Obtener sugerencias contextuales basadas en el último mensaje
-    const getContextualActions = () => {
-        if (chat.length < 2 || isLoading) return [];
-        const lastUserMessage = [...chat].reverse().find(m => m.role === 'user')?.text.toLowerCase() || "";
-        const match = CONTEXTUAL_ACTIONS.find(ctx =>
-            ctx.keywords.some(k => lastUserMessage.includes(k))
-        );
-        return match ? match.actions : [];
-    };
 
     // Bloquear scroll del body cuando está abierto en móvil o expandido
     useEffect(() => {
@@ -246,12 +242,17 @@ const ChatWidget = () => {
 
             if (data.text) {
                 console.log(`✨ Respuesta recibida [Modelo: ${data.model || 'Gemini'}]`);
-                setChat(prev => [...prev, { role: 'assistant', text: data.text }]);
+                setChat(prev => [...prev, {
+                    role: 'assistant',
+                    text: data.text,
+                    isMedicalWarning: data.isMedicalWarning,
+                    suggestedActions: data.suggestedActions
+                }]);
             } else {
                 console.warn("⚠️ La API no devolvió texto. Usando respuesta local...");
                 const fallback = getLocalResponse(text);
                 setTimeout(() => {
-                    setChat(prev => [...prev, { role: 'assistant', text: fallback }]);
+                    setChat(prev => [...prev, { role: 'assistant', text: fallback, isMedicalWarning: false, suggestedActions: [] }]);
                     setIsLoading(false);
                 }, 800);
                 return;
@@ -382,7 +383,37 @@ const ChatWidget = () => {
                         className={`flex-1 overflow-y-auto p-5 space-y-5 bg-[#fcfdfe]/50 custom-scrollbar selection:bg-um-green selection:text-white transition-all ${(isExpanded || isMobile) ? 'md:px-20 lg:px-40 pb-10' : ''}`}
                     >
                         {chat.map((msg, i) => {
-                            const isMedicalWarning = msg.role === 'assistant' && (msg.text.includes('911') || msg.text.includes('médico') || msg.text.includes('emergencia'));
+                            // Lógica refinada para evitar falsos positivos
+                            const isMedicalWarning = msg.role === 'assistant' && (() => {
+                                const text = msg.text.toLowerCase();
+                                const hasUrgentTerm = text.includes('911') || text.includes('urgente') || text.includes('inmediatamente') || text.includes('grave');
+                                const hasMedicalAdvice = text.includes('diagnóstico') || text.includes('tratamiento') || text.includes('recetar') || text.includes('medicamento');
+
+                                // Palabras clave que suelen activar el aviso
+                                const mentionsMedico = text.includes('médico');
+                                const mentionsEmergencia = text.includes('emergencia');
+
+                                // Exclusiones (Frases institucionales comunes que NO deben activar el aviso)
+                                const isInstitutional =
+                                    text.includes('nuestros médicos') ||
+                                    text.includes('listado de médicos') ||
+                                    text.includes('equipo médico') ||
+                                    text.includes('consultas médicas') ||
+                                    text.includes('emergencia 24h') ||
+                                    text.includes('servicio de emergencia') ||
+                                    text.includes('emergencia pediátrica');
+
+                                // Si tiene términos urgentes o de consejo médico, mostrar aviso
+                                if (hasUrgentTerm || hasMedicalAdvice) return true;
+
+                                // Si menciona médico/emergencia pero NO es en contexto institucional informativo
+                                if ((mentionsMedico || mentionsEmergencia) && !isInstitutional) {
+                                    // Si el mensaje es muy corto y menciona emergencia, precaución
+                                    if (text.length < 100 && mentionsEmergencia) return true;
+                                }
+
+                                return false;
+                            })();
 
                             return (
                                 <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}>
@@ -451,24 +482,6 @@ const ChatWidget = () => {
                             )
                         }
 
-                        {/* Dynamic Contextual Actions (Post-Alerta or Specific Topics) */}
-                        {!isLoading && chat.length > 1 && getContextualActions().length > 0 && (
-                            <div className="space-y-3 animate-fade-in">
-                                <p className="text-[10px] font-black uppercase tracking-[0.15em] text-gray-400 ml-2">Sugerencias recomendadas</p>
-                                <div className="flex overflow-x-auto no-scrollbar md:flex-wrap gap-2 pb-2">
-                                    {getContextualActions().map((action, idx) => (
-                                        <button
-                                            key={idx}
-                                            onClick={() => processMessage(action.query)}
-                                            className="px-4 py-2 bg-white border border-gray-100 rounded-full text-[12px] font-bold text-gray-600 hover:border-um-green hover:text-um-green hover:bg-um-green/5 transition-all shadow-sm animate-fade-in-up"
-                                            style={{ animationDelay: `${idx * 0.1}s` }}
-                                        >
-                                            {action.label}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
 
 
                         {isLoading && (

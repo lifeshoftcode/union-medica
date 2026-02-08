@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>README - Clínica Unión Médica</title>
+<style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #24292f; max-width: 850px; margin: 0 auto; padding: 40px; background: #fff; }
+    h1, h2, h3 { margin-top: 24px; margin-bottom: 16px; font-weight: 600; line-height: 1.25; }
+    h1 { font-size: 2em; border-bottom: 1px solid #d0d7de; padding-bottom: 0.3em; }
+    h2 { font-size: 1.5em; border-bottom: 1px solid #d0d7de; padding-bottom: 0.3em; }
+    h3 { font-size: 1.25em; }
+    p { margin-top: 0; margin-bottom: 16px; }
+    code { background-color: #f6f8fa; padding: 0.2em 0.4em; margin: 0; font-size: 85%; border-radius: 6px; font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace; }
+    pre { background-color: #f6f8fa; padding: 16px; overflow: auto; font-size: 85%; line-height: 1.45; border-radius: 6px; }
+    pre code { background-color: transparent; padding: 0; margin: 0; font-size: 100%; word-break: normal; white-space: pre; border: 0; }
+    a { color: #0969da; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    ul, ol { padding-left: 2em; margin-top: 0; margin-bottom: 16px; }
+    li { margin-bottom: 0.25em; }
+    hr { height: 0.25em; padding: 0; margin: 24px 0; background-color: #d0d7de; border: 0; }
+    blockquote { border-left: 0.25em solid #d0d7de; color: #57606a; padding: 0 1em; margin: 0; }
+    table { border-spacing: 0; border-collapse: collapse; margin-top: 0; margin-bottom: 16px; }
+    table th, table td { padding: 6px 13px; border: 1px solid #d0d7de; }
+    table tr { background-color: #fff; border-top: 1px solid #d8dee4; }
+    table tr:nth-child(2n) { background-color: #f6f8fa; }
+</style>
+</head>
+<body>
+<h1>Clínica Unión Médica - Plataforma Digital Moderna</h1>
+<p>Este es el repositorio oficial de la nueva plataforma digital de la <strong>Clínica Unión Médica</strong>, desarrollada con tecnología de vanguardia para ofrecer una experiencia de usuario premium, rápida y accesible. El proyecto integra un portal público para pacientes y un panel de administración para la gestión interna.</p>
+<hr>
+<h2>🚀 Stack Tecnológico</h2>
+<p>El proyecto está construido sobre un stack moderno y eficiente:</p>
+<ul>
+<li><strong>Framework</strong>: <a href="https://nextjs.org/">Next.js 16</a> (App Router)</li>
+<li><strong>Lenguaje</strong>: <a href="https://www.typescriptlang.org/">TypeScript</a></li>
+<li><strong>Estilos</strong>: <a href="https://tailwindcss.com/">Tailwind CSS 4</a></li>
+<li><strong>Base de Datos</strong>: <a href="https://sqlite.org/">SQLite</a> (gestionado vía <a href="https://www.prisma.io/">Prisma ORM</a>)</li>
+<li><strong>IA Generativa</strong>: Google Gemini 3 Flash (via SDK oficial)</li>
+<li><strong>Renderizado</strong>: React 19</li>
+</ul>
+<hr>
+<h2>✨ Características Principales</h2>
+<h3>🏥 Portal del Paciente (Público)</h3>
+<ul>
+<li><strong>Diseño Glassmorphism</strong>: Interfaz moderna con efectos de desenfoque y micro-interacciones fluidas.</li>
+<li><strong>Mega Menú Inteligente</strong>: Navegación intuitiva organizada por departamentos y servicios.</li>
+<li><strong>Asistente Virtual (IA)</strong>: Chatbot &quot;UMN&quot; potenciado por Gemini para responder consultas, horarios y guiar a los pacientes 24/7.</li>
+<li><strong>Directorio Médico</strong>: Búsqueda y filtrado de especialistas.</li>
+<li><strong>Servicios e Investigación</strong>: Secciones detalladas sobre los servicios clínicos y publicaciones científicas.</li>
+</ul>
+<h3>⚙️ Panel de Administración (Privado)</h3>
+<ul>
+<li><strong>Ruta</strong>: <code>/admin</code></li>
+<li><strong>Dashboard</strong>: Vista general del estado de la plataforma.</li>
+<li><strong>Gestión de Contenido</strong>: Herramientas para actualizar médicos, servicios y noticias sin tocar código.</li>
+<li><strong>Autenticación</strong>: Sistema de acceso para personal autorizado.</li>
+</ul>
+<hr>
+<h2>📂 Arquitectura del Proyecto</h2>
+<p>El proyecto sigue una estructura modular basada en el <strong>App Router</strong> de Next.js (<code>/app</code>):</p>
+<h3>Directorios Clave (<code>/app</code>)</h3>
+<ul>
+<li><strong><code>/(root)</code></strong>: Landing page y rutas públicas.</li>
+<li><strong><code>/admin</code></strong>: Panel de control administrativo (protegido).</li>
+<li><strong><code>/login</code></strong>: Portal de acceso para administradores.</li>
+<li><strong><code>/medicos</code></strong>: Catálogo y perfiles de especialistas.</li>
+<li><strong><code>/servicios</code></strong>: Información detallada de servicios médicos.</li>
+<li><strong><code>/nosotros</code></strong>: Información institucional.</li>
+<li><strong><code>/api</code></strong>: Endpoints de backend (Chatbot, búsquedas, etc.).</li>
+</ul>
+<h3>Componentes y Utilidades</h3>
+<ul>
+<li><strong><code>/components</code></strong>: Elementos de UI reutilizables (Botones, Inputs, Modales).</li>
+<li><strong><code>/lib</code></strong>: Utilidades y configuraciones (Prisma Client, Helpers).</li>
+<li><strong><code>/prisma</code></strong>: Esquema de base de datos (<code>schema.prisma</code>) y migraciones.</li>
+</ul>
+<hr>
+<h2>🛠️ Configuración e Instalación</h2>
+<p>Sigue estos pasos para ejecutar el proyecto localmente:</p>
+<h3>1. Clonar el repositorio</h3>
+<pre><code class="language-bash">git clone https://github.com/lifeshoftcode/union-medica.git
+cd union-medica
+</code></pre>
+<h3>2. Instalar dependencias</h3>
+<pre><code class="language-bash">npm install
+</code></pre>
+<h3>3. Configurar Variables de Entorno</h3>
+<p>Crea un archivo <code>.env</code> en la raíz del proyecto basado en el siguiente ejemplo:</p>
+<pre><code class="language-env"># Clave API para el asistente Gemini
+GEMINI_API_KEY=tu_clave_api_aqui
+
+# URL de la base de datos (SQLite por defecto)
+DATABASE_URL=&quot;file:./dev.db&quot;
+</code></pre>
+<h3>4. Inicializar Base de Datos</h3>
+<p>Genera el cliente de Prisma y prepara la base de datos local:</p>
+<pre><code class="language-bash">npx prisma generate
+npx prisma db push
+</code></pre>
+<p><em>(Opcional) Si existe un script de seed, puedes correrlo para poblar datos iniciales:</em></p>
+<pre><code class="language-bash">npx prisma db seed
+</code></pre>
+<h3>5. Iniciar Servidor de Desarrollo</h3>
+<pre><code class="language-bash">npm run dev
+</code></pre>
+<p>La aplicación estará disponible en <code>http://localhost:3000</code>.</p>
+<hr>
+<h2>🧠 Inteligencia Artificial y Chatbot (UMN)</h2>
+<p>El asistente virtual utiliza una arquitectura <strong>RAG (Retrieval-Augmented Generation)</strong> híbrida para ofrecer respuestas precisas y contextualizadas.</p>
+<h3>Tecnologías y Técnicas</h3>
+<ul>
+<li><strong>Motor de IA</strong>: Google Gemini 3 Flash.</li>
+<li><strong>RAG Dinámico</strong>: El sistema analiza la consulta del usuario, extrae palabras clave y busca en tiempo real en la base de datos SQLite (vía Prisma) para encontrar:<ul>
+<li>Médicos y especialistas relevantes.</li>
+<li>Servicios clínicos.</li>
+<li>Publicaciones científicas e investigaciones.</li>
+</ul>
+</li>
+<li><strong>Base de Conocimiento Estática</strong>: Se complementa con un módulo de conocimiento institucional (<code>knowledge.ts</code>) que contiene datos inmutables como historia, misión, ubicaciones y redes sociales.</li>
+<li><strong>Ingesta de Datos</strong>: Incluye scripts (<code>extract_doctors.js</code>) para la migración y estructuración inicial de datos desde fuentes legacy.</li>
+</ul>
+<h3>Flujo de Respuesta</h3>
+<ol>
+<li><strong>User Query</strong> -&gt; 2. <strong>Keyword Extraction</strong> -&gt; 3. <strong>DB Search (Prisma)</strong> -&gt; 4. <strong>Context Construction</strong> -&gt; 5. <strong>Gemini Generation</strong> -&gt; 6. <strong>Response</strong></li>
+</ol>
+<hr>
+<h2>📝 Comandos Útiles</h2>
+<ul>
+<li><code>npm run dev</code>: Inicia el entorno de desarrollo.</li>
+<li><code>npm run build</code>: Construye la aplicación para producción (incluye generación de Prisma).</li>
+<li><code>npx prisma studio</code>: Abre una interfaz visual para gestionar la base de datos localmente.</li>
+</ul>
+<hr>
+<h2>📄 Licencia</h2>
+<p>Este proyecto es privado y propiedad de Clínica Unión Médica.</p>
+</body>
+</html>

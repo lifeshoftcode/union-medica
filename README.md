@@ -12,7 +12,7 @@ El proyecto está construido sobre un stack moderno y eficiente:
 - **Lenguaje**: [TypeScript](https://www.typescriptlang.org/)
 - **Estilos**: [Tailwind CSS 4](https://tailwindcss.com/)
 - **Base de Datos**: [SQLite](https://sqlite.org/) (gestionado vía [Prisma ORM](https://www.prisma.io/))
-- **IA Generativa**: Google Gemini 1.5 Flash (via SDK oficial)
+- **IA Generativa**: Google Gemini 3 Flash (via SDK oficial)
 - **Renderizado**: React 19
 
 ---

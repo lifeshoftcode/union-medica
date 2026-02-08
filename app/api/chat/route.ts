@@ -129,28 +129,32 @@ export async function POST(req: Request) {
         `;
 
         const SYSTEM_PROMPT = `Eres el asistente virtual de la Clínica Unión Médica del Norte (UMN). 
-Usa la siguiente información para responder de forma amable y profesional.
+Responde siempre en formato JSON con la siguiente estructura:
+{
+  "text": "Tu respuesta aquí en Markdown",
+  "isMedicalWarning": boolean, (true si das consejos médicos, mencionas medicamentos específicos, o si es una emergencia real/911)
+  "suggestedActions": [
+    { "label": "Texto del botón", "query": "Pregunta que hará el usuario al pulsar" }
+  ]
+}
 
+REGLAS:
+1. Usa la información institucional proporcionada.
+2. "text" debe estar formateado en Markdown.
+3. No inventes médicos que no estén en el contexto.
+4. "isMedicalWarning" es true solo si hay un riesgo a la salud o recomiendas acciones médicas urgentes. No lo uses para info general de servicios.
+5. "suggestedActions" debe ofrecer pasos lógicos (ej: si preguntan por dolor de pecho, sugiere "Ver Cardiólogos").
+
+INFO INSTITUCIONAL:
 ${infoInstitucional}
 
-CONTEXTO ENCONTRADO (RAG):
+CONTEXTO RAG:
 ${contextParts}
-- ESPECIALIDADES EXTRAIDAS DE DB: ${specialtiesList}
-
-INSTRUCCIONES:
-1. Si preguntan por médicos, dales nombres y detalles del contexto encontrado.
-2. Si preguntan por investigaciones o publicaciones, menciona los títulos encontrados: ${relevantResearch.map(r => r.title).join(", ") || 'No se hallaron publicaciones específicas ahora'}.
-3. Si preguntan por seguros, menciona que aceptamos los principales seguros del país como: ${CLINIC_KNOWLEDGE.seguros_aceptados.slice(0, 5).join(", ")} y otros.
-4. Si preguntan por la historia, menciona que iniciamos en 1994 y destaca hitos como la Torre E (2023).
-5. Si preguntan por la fundación, explica su labor social y operativos médicos.
-6. Si preguntan por servicios de emergencia o disponibilidad 24h, menciona las emergencias, farmacia y laboratorio 24h.
-7. Si preguntan por especialidades o unidades específicas, menciona la Unidad Respiratoria Integral (URI) o el Centro de Oncología si son relevantes.
-8. Si piden redes sociales, dales los enlaces de Instagram o Facebook.
-9. Usa Markdown. Sé conciso e informativo.`;
+`;
 
         const contents = [
             { role: 'user', parts: [{ text: `INSTRUCCIONES DE SISTEMA: ${SYSTEM_PROMPT}` }] },
-            { role: 'model', parts: [{ text: "Entendido. Soy el asistente de Clínica Unión Médica. ¿Cómo puedo ayudarte?" }] },
+            { role: 'model', parts: [{ text: "```json\n{\n  \"text\": \"Entendido. ¿Cómo puedo ayudarte hoy?\",\n  \"isMedicalWarning\": false,\n  \"suggestedActions\": []\n}\n```" }] },
             ...messages.map((m: { role: string; text: string }) => ({
                 role: m.role === 'assistant' ? 'model' : 'user',
                 parts: [{ text: m.text }],
@@ -160,8 +164,6 @@ INSTRUCCIONES:
 
         // --- Model Selection & Fallback Logic ---
         const preferredModel = process.env.GEMINI_MODEL || AVAILABLE_MODELS[0];
-
-        // Creamos una cola de modelos: el preferido primero, luego los demás en orden
         const modelQueue = [preferredModel, ...AVAILABLE_MODELS.filter(m => m !== preferredModel)];
 
         let responseText = "";
@@ -170,15 +172,18 @@ INSTRUCCIONES:
 
         for (const modelName of modelQueue) {
             try {
-                console.log(`🧠 Intentando con modelo: ${modelName}...`);
-                const model = genAI.getGenerativeModel({ model: modelName });
+                console.log(`🧠 Intentando con modelo JSON: ${modelName}...`);
+                const model = genAI.getGenerativeModel({
+                    model: modelName,
+                    generationConfig: { responseMimeType: "application/json" }
+                });
 
                 const result = await model.generateContent({ contents });
                 const response = await result.response;
                 responseText = response.text();
 
                 finalModelUsed = modelName;
-                break; // Si tiene éxito, salimos del bucle
+                break;
             } catch (err: unknown) {
                 const apiError = err as { status?: number; message?: string }; // Basic casting
                 lastError = apiError;
@@ -194,11 +199,17 @@ INSTRUCCIONES:
 
         if (!responseText) throw lastError || new Error("No se pudo generar respuesta con ninguno de los modelos.");
 
+        let parsedResponse = { text: responseText, isMedicalWarning: false, suggestedActions: [] };
+        try {
+            parsedResponse = JSON.parse(responseText);
+        } catch {
+            console.error("⚠️ Error parseando JSON de Gemini, enviando como texto plano.");
+        }
+
         console.log(`✅ Gemini respondió con éxito usando: ${finalModelUsed} `);
-        console.log(`📄 Respuesta(primeros 100 caracteres): ${responseText.substring(0, 100)}...`);
 
         return NextResponse.json({
-            text: responseText,
+            ...parsedResponse,
             model: finalModelUsed
         });
 

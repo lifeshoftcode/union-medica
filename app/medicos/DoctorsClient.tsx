@@ -182,7 +182,7 @@ export default function DoctorsClient({
                                     <div className="h-44 w-36 overflow-hidden rounded-2xl shadow-xl shadow-gray-200 ring-2 ring-white transition-all group-hover:ring-um-green/10 bg-gray-100">
                                         <Image
                                             alt={doc.name}
-                                            src={doc.image || "/images/home/doctor-card.jpg"}
+                                            src={doc.image || "/images/home/doctor-card.webp"}
                                             width={144}
                                             height={176}
                                             className="h-full w-full object-cover transition duration-700 group-hover:scale-105"

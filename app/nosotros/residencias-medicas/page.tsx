@@ -81,7 +81,7 @@ export default function ResidenciasMedicasPage() {
                         <section className="bg-white rounded-[2.5rem] overflow-hidden shadow-xl border border-gray-100">
                             <div className="relative h-64 w-full">
                                 <Image
-                                    src="/images/conocenos/residencias-medicas.jpg"
+                                    src="/images/home/residencias-medicas.webp"
                                     alt="Estudiantes de medicina"
                                     fill
                                     className="object-cover"
