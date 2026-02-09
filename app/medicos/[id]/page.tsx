@@ -1,4 +1,4 @@
-import Image from "next/image";
+import DoctorImage from "@/components/DoctorImage";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import doctorsData from "@/doctors.json";
@@ -84,7 +84,7 @@ export default async function DoctorProfilePage({ params }: Props) {
                             <div className="relative group mb-8">
                                 <div className="absolute -inset-1 bg-gradient-to-tr from-um-green to-um-terciario rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
                                 <div className="relative h-64 w-52 overflow-hidden rounded-2xl shadow-2xl bg-gray-100 ring-4 ring-white">
-                                    <Image
+                                    <DoctorImage
                                         alt={doctor.name}
                                         src={doctor.image}
                                         fill

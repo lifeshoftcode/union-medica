@@ -3,14 +3,14 @@ import newsParallaxImg from "@/public/images/home/news-parallax.webp";
 
 const ParallaxNewsSection = () => {
     return (
-        <section className="relative h-[600px] w-full overflow-hidden group">
+        <section className="relative h-[600px] w-full overflow-hidden group" style={{ clipPath: "inset(0)" }}>
             <Image
                 src={newsParallaxImg}
                 alt="Fondo de noticias médicas"
                 fill
                 priority
                 placeholder="blur"
-                className="object-cover select-none pointer-events-none"
+                className="object-cover select-none pointer-events-none !fixed inset-0"
                 sizes="100vw"
             />
             <div className="absolute inset-0 bg-black/60 transition-colors group-hover:bg-black/50" />

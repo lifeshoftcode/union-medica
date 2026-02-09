@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Image from "next/image";
+import DoctorImage from "@/components/DoctorImage";
 import { toggleDoctorStatus, deleteDoctor } from "./actions";
 import DoctorModal from "./DoctorModal";
 
@@ -150,8 +150,8 @@ export default function AdminDoctorsClient({
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-4">
                                             <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-gray-100 border border-gray-100">
-                                                <Image
-                                                    src={doctor.image || "/images/placeholder-avatar.jpg"}
+                                                <DoctorImage
+                                                    src={doctor.image}
                                                     alt={doctor.name}
                                                     fill
                                                     className="object-cover"
